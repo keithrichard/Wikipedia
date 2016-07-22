@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WikipediaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Article">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ArticleName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PageId" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ArticleCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ArticleId" Type="int" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_ArticleCategory_Article">
+          <End Role="Article" Type="Self.Article" Multiplicity="1" />
+          <End Role="ArticleCategory" Type="Self.ArticleCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Article">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArticleCategory">
+              <PropertyRef Name="ArticleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArticleCategory_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="ArticleCategory" Type="Self.ArticleCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArticleCategory">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddArticle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Url" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ArticleName" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="PageId" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="AddArticleCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="artId" Type="int" Mode="In" />
+          <Parameter Name="catId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AddCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CategoryName" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ClearArticles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ClearDatabase" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetAllArticles" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetCategories" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="WikipediaModelStoreContainer">
+          <EntitySet Name="Article" EntityType="Self.Article" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ArticleCategory" EntityType="Self.ArticleCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ArticleCategory_Article" Association="Self.FK_ArticleCategory_Article">
+            <End Role="Article" EntitySet="Article" />
+            <End Role="ArticleCategory" EntitySet="ArticleCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArticleCategory_Category" Association="Self.FK_ArticleCategory_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="ArticleCategory" EntitySet="ArticleCategory" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WikipediaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Article">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PageId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ArticleCategories" Relationship="Self.FK_ArticleCategory_Article" FromRole="Article" ToRole="ArticleCategory" />
+          <Property Name="ArticleName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ArticleCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ArticleId" Type="Int32" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Article" Relationship="Self.FK_ArticleCategory_Article" FromRole="ArticleCategory" ToRole="Article" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_ArticleCategory_Category" FromRole="ArticleCategory" ToRole="Category" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="ArticleCategories" Relationship="Self.FK_ArticleCategory_Category" FromRole="Category" ToRole="ArticleCategory" />
+          <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_ArticleCategory_Article">
+          <End Role="Article" Type="Self.Article" Multiplicity="1" />
+          <End Role="ArticleCategory" Type="Self.ArticleCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Article">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArticleCategory">
+              <PropertyRef Name="ArticleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArticleCategory_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="ArticleCategory" Type="Self.ArticleCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ArticleCategory">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WikipediaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Articles" EntityType="Self.Article" />
+          <EntitySet Name="ArticleCategories" EntityType="Self.ArticleCategory" />
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <AssociationSet Name="FK_ArticleCategory_Article" Association="Self.FK_ArticleCategory_Article">
+            <End Role="Article" EntitySet="Articles" />
+            <End Role="ArticleCategory" EntitySet="ArticleCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArticleCategory_Category" Association="Self.FK_ArticleCategory_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="ArticleCategory" EntitySet="ArticleCategories" />
+          </AssociationSet>
+          <FunctionImport Name="AddArticle">
+            <Parameter Name="Url" Mode="In" Type="String" />
+            <Parameter Name="ArticleName" Mode="In" Type="String" />
+            <Parameter Name="PageId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddArticleCategory">
+            <Parameter Name="artId" Mode="In" Type="Int32" />
+            <Parameter Name="catId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ClearArticles" />
+          <FunctionImport Name="AddCategory">
+          <Parameter Name="CategoryName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetCategories" ReturnType="Collection(WikipediaModel.GetCategories_Result)" />
+          <FunctionImport Name="GetAllArticles" ReturnType="Collection(WikipediaModel.GetAllArticles_Result)" />
+          <FunctionImport Name="ClearDatabase" />
+        </EntityContainer>
+        <ComplexType Name="GetCategories_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="CategoryName" Nullable="false" MaxLength="50" />
+          </ComplexType>
+        <ComplexType Name="GetAllArticles_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Url" Nullable="false" />
+          <Property Type="String" Name="ArticleName" Nullable="false" />
+          <Property Type="String" Name="PageId" Nullable="false" />
+          <Property Type="Int32" Name="CategoryID" Nullable="true" />
+          <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WikipediaModelStoreContainer" CdmEntityContainer="WikipediaEntities">
+          <EntitySetMapping Name="Articles">
+            <EntityTypeMapping TypeName="WikipediaModel.Article">
+              <MappingFragment StoreEntitySet="Article">
+                <ScalarProperty Name="ArticleName" ColumnName="ArticleName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="PageId" ColumnName="PageId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ArticleCategories">
+            <EntityTypeMapping TypeName="WikipediaModel.ArticleCategory">
+              <MappingFragment StoreEntitySet="ArticleCategory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ArticleId" ColumnName="ArticleId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="WikipediaModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddArticle" FunctionName="WikipediaModel.Store.AddArticle" />
+          <FunctionImportMapping FunctionImportName="AddArticleCategory" FunctionName="WikipediaModel.Store.AddArticleCategory" />
+          <FunctionImportMapping FunctionImportName="ClearArticles" FunctionName="WikipediaModel.Store.ClearArticles" />
+          <FunctionImportMapping FunctionImportName="AddCategory" FunctionName="WikipediaModel.Store.AddCategory" />
+          <FunctionImportMapping FunctionImportName="GetCategories" FunctionName="WikipediaModel.Store.GetCategories">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WikipediaModel.GetCategories_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAllArticles" FunctionName="WikipediaModel.Store.GetAllArticles">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="WikipediaModel.GetAllArticles_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="ArticleName" ColumnName="ArticleName" />
+                <ScalarProperty Name="PageId" ColumnName="PageId" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ClearDatabase" FunctionName="WikipediaModel.Store.ClearDatabase" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

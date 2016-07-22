@@ -1,0 +1,84 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.topMenu {
+    top: 0;
+    position: fixed;
+    z-index: 1031;
+    margin-top: 55px;
+    right: 0;
+    left: 0;
+    background-color: white;
+}
+
+.searchResult:hover {
+    cursor: pointer;
+    background: #428BCA;
+    color: #fff;
+    transition: all 0.2s ease 0s;
+    opacity: 0.75;
+}
+
+.marginLeft {
+    margin-left: 20px;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: normal;
+}
+
+#dropdownCategoriesUl li:hover {
+    cursor: pointer;
+    background: #428BCA;
+    color: #fff;
+    transition: all 0.2s ease 0s;
+    opacity: 0.75;
+}
+
+.ui-autocomplete {
+    z-index: 10000000;
+}
+
+.ui-menu {
+    background-color: white;
+    border: solid;
+    border-width: 1px;
+}
+
+    .ui-menu-item:hover {
+        cursor: pointer;
+        background: #428BCA;
+        color: #fff;
+        transition: all 0.2s ease 0s;
+        opacity: 0.75;
+    }
+
+.ui-helper-hidden-accessible {
+    display: none;
+}

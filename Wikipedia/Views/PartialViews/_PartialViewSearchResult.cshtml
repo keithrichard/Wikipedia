@@ -1,0 +1,43 @@
+﻿
+@model Wikipedia.Models.SearchResultModel
+@{bool maxLimit = (Model.WikipediaArticles.Count() >= 10) ;}
+<div class="marginLeft">
+    <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownCategories" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Filter by category
+            <span class="caret"></span>
+        </button>
+        <ul id="dropdownCategoriesUl" class="dropdown-menu" aria-labelledby="dropdownCategories"></ul>
+    </div>
+</div>
+@if (Model.WikipediaArticles != null)
+{
+    foreach (var article in Model.WikipediaArticles)
+    {
+        <div id="@article.PageId" onclick='openModal("@article.Url", this, @article.Id, "@article.ArticleName")' class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row form-group searchResult ">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                <div class="col-lg-11 col-md-11 col-xs-11 col-sm-11 ">
+                    <h4>
+                        Article: @article.ArticleName
+                    </h4>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6  ">
+                    <b>URL: </b>
+                    @article.Url
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 ">
+                    <b>Category: </b>
+                    @foreach (var cat in article.Category)
+                    {
+                        <span class="category" id="@cat.Id">
+                            @cat.CategoryName
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
+<div id="resultCountmaxLimit" maxLimit="@maxLimit.ToString()"></div>
